@@ -7856,11 +7856,22 @@ TAG_DEFINE_346342354254643( \
     "", \
     "")
 TAG_DEFINE_346342354254643( \
+	"DF11", \
+	"Acquirer ID", \
+	"", \
+	"", \
+	"", \
+	"", \
+	"", \
+	"", \
+	"", \
+	"")
+TAG_DEFINE_346342354254643( \
     "DF12", \
-    "Vehicle Registration Number", \
+    "Answer To Reset (ATR)", \
     "", \
-    "Card", \
-    "A", \
+    "", \
+    "", \
     "", \
     "", \
     "", \
@@ -7868,10 +7879,10 @@ TAG_DEFINE_346342354254643( \
     "")
 TAG_DEFINE_346342354254643( \
     "DF13", \
-    "DDA Public Modulus", \
+    "ISO 7811 Track 1 card data", \
     "", \
-    "Card", \
-    "H", \
+    "", \
+    "", \
     "", \
     "", \
     "", \
@@ -7879,10 +7890,10 @@ TAG_DEFINE_346342354254643( \
     "")
 TAG_DEFINE_346342354254643( \
     "DF14", \
-    "Driver Name", \
+    "ISO 7811 Track 2 card data", \
     "", \
-    "Card", \
-    "A", \
+    "", \
+    "", \
     "", \
     "", \
     "", \
@@ -7890,10 +7901,10 @@ TAG_DEFINE_346342354254643( \
     "")
 TAG_DEFINE_346342354254643( \
     "DF15", \
-    "Driver ID", \
+    "ISO 7811 Track 3 card data", \
     "", \
-    "Card", \
-    "A", \
+    "", \
+    "", \
     "", \
     "", \
     "", \
@@ -7901,10 +7912,10 @@ TAG_DEFINE_346342354254643( \
     "")
 TAG_DEFINE_346342354254643( \
     "DF16", \
-    "Max Fill Volume", \
+    "Enciphered PIN Block", \
     "", \
-    "Card", \
-    "H", \
+    "", \
+    "", \
     "", \
     "", \
     "", \
@@ -7912,10 +7923,10 @@ TAG_DEFINE_346342354254643( \
     "")
 TAG_DEFINE_346342354254643( \
     "DF17", \
-    "DDA Public Modulus Length", \
+    "Key Serial Number", \
     "", \
-    "Card", \
-    "H", \
+    "", \
+    "", \
     "", \
     "", \
     "", \
@@ -7923,10 +7934,10 @@ TAG_DEFINE_346342354254643( \
     "")
 TAG_DEFINE_346342354254643( \
     "DF18", \
-    "Mileage", \
+    "Risk Management", \
     "", \
-    "Card", \
-    "H", \
+    "", \
+    "", \
     "", \
     "", \
     "", \

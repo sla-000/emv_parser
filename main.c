@@ -248,13 +248,13 @@ int main( const int argc, const char * const argv[] ) {
 
 					curr_offset += bytes * 2;
 
-					fprintf( OutFile ? OutFile : stdout, "data: %s\n", buf );
+					fprintf( OutFile ? OutFile : stdout, "data: %s\n\n", buf );
 
 					found = TRUE;
 					break;
 				}
 				else {
-					fprintf( OutFile ? OutFile : stdout, "no data\n" );
+					fprintf( OutFile ? OutFile : stdout, "no data\n\n" );
 
 					found = TRUE;
 					break;

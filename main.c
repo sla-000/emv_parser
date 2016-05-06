@@ -13,6 +13,12 @@
 
 //----------------------------------------------------------------
 
+typedef unsigned int BOOLX;
+#define TRUE			1
+#define FALSE			0
+
+//----------------------------------------------------------------
+
 typedef struct {
 	char *Tag;
 	char *Name;
@@ -27,7 +33,7 @@ typedef struct {
 
 static const TagDesc_t TagDesc[] = {
 #include "all-tags2.h"
-};
+		};
 
 #define TAG_NUM				(sizeof(TagDesc)/sizeof(TagDesc[0]))
 
@@ -111,12 +117,46 @@ static FILE *OutFile;
 
 //----------------------------------------------------------------
 
-int main( int argc, char * argv[] ) {
+static int Hex2Int( const char hex ) {
+	int rez;
+
+	if( hex > '0' && hex < '9' ) {
+		rez = hex;
+		rez -= '0';
+
+		return rez;
+	}
+	else if( hex > 'a' && hex < 'f' ) {
+		rez = hex + 10;
+		rez -= 'a';
+
+		return rez;
+	}
+	else if( hex > 'A' && hex < 'F' ) {
+		rez = hex + 10;
+		rez -= 'A';
+
+		return rez;
+	}
+	else {
+		return 0;
+	}
+}
+
+//----------------------------------------------------------------
+
+static int GetLen( const char * const str2 ) {
+	return Hex2Int( str2[0] ) * 10 + Hex2Int( str2[1] );
+}
+
+//----------------------------------------------------------------
+
+int main( const int argc, const char * const argv[] ) {
 	(void)__COUNTER__;
 
 	// start ------------
 
-	if( argp_parse( &Argp, argc, argv, 0, 0, NULL ) )
+	if( argp_parse( &Argp, argc, (char **)argv, 0, 0, NULL ) )
 		exit( EXIT_REZ );
 
 	if( strcmp( InFilename, "" ) == 0 ) {
@@ -143,29 +183,81 @@ int main( int argc, char * argv[] ) {
 		}
 	}
 
-	if( fseek( InFile, FileOffset * 2, SEEK_SET ) == -1 ) {
-		ERR( strerror(errno) );
-
-		exit( EXIT_REZ );
-	}
-
 	// body ------------
 
-	printf("\n");
+	long int curr_offset = FileOffset * 2;
 
 	do {
-		int c;
+		BOOLX found;
+		BOOLX go_exit = FALSE;
 
-		c = fgetc( InFile );
+		for( int q = 0; q < TAG_NUM; ++q ) { // перебираем тэги
+			found = FALSE;
 
-		if( c == EOF )
+			char buf[32];
+
+			fseek( InFile, curr_offset, SEEK_SET );
+
+			int len = strlen( TagDesc[q].Tag );
+
+			if( fgets( buf, len + 1, InFile ) == NULL ) { // не смог
+				go_exit = TRUE;
+				break;
+			}
+
+			if( strcmp( buf, TagDesc[q].Tag ) == 0 ) {
+				fprintf( OutFile ? OutFile : stdout, "tag: %s - %s", buf, TagDesc[q].Name );
+				if( strcmp( TagDesc[q].Desc, "" ) == 0 ) {
+					fprintf( OutFile ? OutFile : stdout, "\n" );
+				}
+				else {
+					fprintf( OutFile ? OutFile : stdout, " (%s)\n", TagDesc[q].Desc );
+				}
+
+				curr_offset += len;
+
+				if( fgets( buf, 2 + 1, InFile ) == NULL ) { // не смог
+					go_exit = TRUE;
+					break;
+				}
+
+				int bytes = GetLen( buf );
+
+				curr_offset += 2;
+
+				if( bytes ) {
+					fprintf( OutFile ? OutFile : stdout, "len: %d\n", bytes );
+
+					if( fgets( buf, ( bytes * 2 ) + 1, InFile ) == NULL ) { // не смог
+						go_exit = TRUE;
+						break;
+					}
+
+					curr_offset += bytes * 2;
+
+					fprintf( OutFile ? OutFile : stdout, "data: %s\n", buf );
+
+					found = TRUE;
+					break;
+				}
+				else {
+					fprintf( OutFile ? OutFile : stdout, "no data\n" );
+
+					found = TRUE;
+					break;
+				}
+			}
+		}
+
+		if( ! found ) {
+			curr_offset += 2;
+		}
+
+		if( go_exit ) {
 			break;
-
-		fputc(c, OutFile ? OutFile : stdout );
+		}
 	}
-	while(1);
-
-	printf("\n");
+	while( !feof( InFile ) );
 
 	// end ------------
 

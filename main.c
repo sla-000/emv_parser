@@ -44,6 +44,8 @@ static char OutFilename[1024];
 
 static long int FileOffset;
 
+static BOOLX AutoFilename;
+
 //----------------------------------------------------------------
 
 const char *argp_program_version = "TLV parse " VERSION;
@@ -53,11 +55,12 @@ static char ArgsDoc[] = "";
 //----------------------------------------------------------------
 
 static struct argp_option ArgsOptions[] = { //
-		{ "input", 'i', "FILE", 0, "Input file name", 100 }, //
-			{ "output", 'o', "FILE", 0, "Output file name, stdout if none", 200 }, //
-			{ "offset", 's', "INTEGER", 0, "Offset or shift in input file (0)", 300 }, //
-			{ 0 }, //
-		};//
+	{ "input", 'i', "FILE", 0, "Input file name", 100 }, //
+	{ "output", 'o', "FILE", 0, "Output file name, stdout if none", 200 }, //
+	{ "auto", 'a', 0, 0, "Auto output file name", 300 }, //
+	{ "offset", 's', "INTEGER", 0, "Offset or shift in input file (0)", 400 }, //
+	{ 0 }, //
+};//
 
 //----------------------------------------------------------------
 
@@ -78,6 +81,11 @@ static error_t ArgsParser( int key, char *arg, struct argp_state *state ) {
 
 		case 'o': {
 			strcpy( OutFilename, arg );
+			break;
+		}
+
+		case 'a': {
+			AutoFilename = TRUE;
 			break;
 		}
 
@@ -173,6 +181,11 @@ int main( const int argc, const char * const argv[] ) {
 		exit( EXIT_REZ );
 	}
 
+	if( AutoFilename ) {
+		strcpy( OutFilename, "parsed-" );
+		strcat( OutFilename, InFilename );
+	}
+
 	if( strcmp( OutFilename, "" ) != 0 ) {
 		OutFile = fopen( OutFilename, "wb" );
 
@@ -250,6 +263,14 @@ int main( const int argc, const char * const argv[] ) {
 		}
 
 		if( ! found ) {
+			char buf[32];
+
+			fseek( InFile, curr_offset, SEEK_SET );
+
+			if( fgets( buf, 6 + 1, InFile ) != NULL ) { // не смог
+				fprintf( OutFile ? OutFile : stdout, "Unknown tag %s, skip one word...\n", buf );
+			}
+
 			curr_offset += 2;
 		}
 

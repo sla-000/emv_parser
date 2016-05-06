@@ -1,0 +1,6 @@
+syntax: glob
+Debug/**.d
+Debug/tlv_parse
+test
+header.htm
+Debug/**.o

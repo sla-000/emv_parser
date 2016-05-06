@@ -128,19 +128,19 @@ static FILE *OutFile;
 static int Hex2Int( const char hex ) {
 	int rez;
 
-	if( hex > '0' && hex < '9' ) {
+	if( hex >= '0' && hex <= '9' ) {
 		rez = hex;
 		rez -= '0';
 
 		return rez;
 	}
-	else if( hex > 'a' && hex < 'f' ) {
+	else if( hex >= 'a' && hex <= 'f' ) {
 		rez = hex + 10;
 		rez -= 'a';
 
 		return rez;
 	}
-	else if( hex > 'A' && hex < 'F' ) {
+	else if( hex >= 'A' && hex <= 'F' ) {
 		rez = hex + 10;
 		rez -= 'A';
 
@@ -154,7 +154,7 @@ static int Hex2Int( const char hex ) {
 //----------------------------------------------------------------
 
 static int GetLen( const char * const str2 ) {
-	return Hex2Int( str2[0] ) * 10 + Hex2Int( str2[1] );
+	return Hex2Int( str2[0] ) * 16 + Hex2Int( str2[1] );
 }
 
 //----------------------------------------------------------------

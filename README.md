@@ -2,6 +2,10 @@
 
 Utility used to parse TLV EMV files
 
+# How to compile
+
+Import project to configured for C/C++ Eclipse IDE, or if You don't have it or don't want to start it cd to Debug directory and execute make.
+
 # Usage
 
 Type 
